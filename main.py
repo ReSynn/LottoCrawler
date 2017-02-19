@@ -24,6 +24,7 @@ class cLottoDraw():
         self.__WinNumber4 = "0"
         self.__WinNumber5 = "0"
         self.__WinNumber6 = "0"
+        self.__WinDraw = "0"
         self.__SuperNumber = "0"
 
     def getLottoDrawSoup(self):
@@ -62,6 +63,9 @@ class cLottoDraw():
     def getWinNumber6(self):
         return self.__WinNumber6
 
+    def getWinDraw(self):
+        return self.__WinDraw
+
     def getSuperNumber(self):
         return self.__SuperNumber
 
@@ -97,6 +101,9 @@ class cLottoDraw():
 
     def setWinNumber6(self, WinNumber6):
         self.__WinNumber6 = WinNumber6
+
+    def setWinDraw(self, WinDraw):
+        self.__WinDraw = WinDraw
 
     def setSuperNumber(self, SuperNumber):
         self.__SuperNumber = SuperNumber
@@ -149,9 +156,16 @@ class cLottoDraw():
 
     def findWinningNumbers(self):
         WinningNumbers = []
+        WinDraw = ""
         Numbers = self.__LottoDrawSoup.findAll("div", {"class": "zahlensuche_zahl"})
         for Number in Numbers:
-            WinningNumbers.append(Number.text)
+            Number = str(Number.text)
+            length = len(str(Number))
+            if length == 1:
+                Number = "0" + Number
+
+            WinningNumbers.append(Number)
+            WinDraw = WinDraw + Number
 
         self.setWinNumber1(WinningNumbers[0])
         self.setWinNumber2(WinningNumbers[1])
@@ -159,6 +173,7 @@ class cLottoDraw():
         self.setWinNumber4(WinningNumbers[3])
         self.setWinNumber5(WinningNumbers[4])
         self.setWinNumber6(WinningNumbers[5])
+        self.setWinDraw(WinDraw)
 
     def findSuperNumber(self):
         SuperNumber = 0
@@ -208,13 +223,15 @@ class cLottoDraw():
                         str(self.getYear()) + ', ' +
                         str(self.getMonth()) + ', ' +
                         str(self.getDay()) + ', ' +
-                        str(self.getWinNumber1()) + ', ' +
-                        str(self.getWinNumber2()) + ', ' +
-                        str(self.getWinNumber3()) + ', ' +
-                        str(self.getWinNumber4()) + ', ' +
-                        str(self.getWinNumber5()) + ', ' +
-                        str(self.getWinNumber6()) + ', ' +
-                        str(self.getSuperNumber()) + '\n' )
+                        '"' + str(self.getWinNumber1()) + '"' +  ', ' +
+                        '"' + str(self.getWinNumber2()) + '"' + ', ' +
+                        '"' + str(self.getWinNumber3()) + '"' + ', ' +
+                        '"' + str(self.getWinNumber4()) + '"' + ', ' +
+                        '"' + str(self.getWinNumber5()) + '"' + ', ' +
+                        '"' + str(self.getWinNumber6()) + '"' + ', ' +
+                        str(self.getSuperNumber()) + ', ' +
+                        '"' + str(self.getWinDraw()) + '"' + ', ' +
+                        str(self.getWeekDay()) + '\n')
         FileWrite.close()
 
     def writeToTABFile2(self, CPU):
@@ -223,13 +240,14 @@ class cLottoDraw():
                         str(self.getYear()) + '\t' +
                         str(self.getMonth()) + '\t' +
                         str(self.getDay()) + '\t' +
-                        str(self.getWinNumber1()) + '\t' +
-                        str(self.getWinNumber2()) + '\t' +
-                        str(self.getWinNumber3()) + '\t' +
-                        str(self.getWinNumber4()) + '\t' +
-                        str(self.getWinNumber5()) + '\t' +
-                        str(self.getWinNumber6()) + '\t' +
+                        '"' + str(self.getWinNumber1()) + '"' + '\t' +
+                        '"' + str(self.getWinNumber2()) + '"' + '\t' +
+                        '"' + str(self.getWinNumber3()) + '"' + '\t' +
+                        '"' + str(self.getWinNumber4()) + '"' + '\t' +
+                        '"' + str(self.getWinNumber5()) + '"' + '\t' +
+                        '"' + str(self.getWinNumber6()) + '"' + '\t' +
                         str(self.getSuperNumber()) + '\t' +
+                        '"' + str(self.getWinDraw()) + '"' + '\t' +
                         str(self.getWeekDay()) + '\n')
         FileWrite.close()
 
@@ -332,7 +350,7 @@ def getDraws(CPU, allLottoDrawYearURLs, start, end):
             FileWrite.close()
 
     for LottoDraw in allLottoDraws:
-        #LottoDraw.writeToCSVFile2(CPU)
+        LottoDraw.writeToCSVFile2(CPU)
         LottoDraw.writeToTABFile2(CPU)
 
 
